@@ -8,6 +8,7 @@ import com.couragegang.secrets.repo.CredentialsRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.inject.Singleton;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Map;
@@ -31,7 +32,7 @@ public final class CredentialsService {
             var bytes = json.writeValueAsString(req.payload()).getBytes(StandardCharsets.UTF_8);
             var id = repo.insert(req.orgId(), req.workspaceId(), req.connectorKey(), cipher.encrypt(bytes));
             return new StoreCredentialsResponse(PayloadCipher.encodeRef(id));
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             throw new IllegalStateException(e);
         }
     }
@@ -43,7 +44,7 @@ public final class CredentialsService {
             var plain = cipher.decrypt(row.ciphertext());
             var payload = json.readValue(plain, new TypeReference<Map<String, String>>() {});
             return new CredentialsPayloadResponse(payload);
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             throw new IllegalStateException(e);
         }
     }
