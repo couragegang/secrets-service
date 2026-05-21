@@ -7,8 +7,12 @@ import java.util.Map;
 @Controller
 public final class HealthInfoController {
 
-    @Get("/health")
-    public Map<String, String> health() {
-        return Map.of("status", "UP", "service", "secrets-service");
+    @Get("/")
+    public Map<String, String> root() {
+        return Map.of(
+                "service", "secrets-service",
+                "health", "/v1/secrets/health",
+                "metrics", "/v1/secrets/metrics",
+                "internal", "/v1/secrets/internal/credentials");
     }
 }
