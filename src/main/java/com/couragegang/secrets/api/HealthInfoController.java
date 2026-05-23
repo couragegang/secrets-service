@@ -12,7 +12,7 @@ public final class HealthInfoController {
         return Map.of(
                 "service", "secrets-service",
                 "health", "/v1/secrets/health",
-                "metrics", "/v1/secrets/metrics",
+                "metrics", "/v1/secrets/prometheus",
                 "internal", "/v1/secrets/internal/credentials");
     }
 }
